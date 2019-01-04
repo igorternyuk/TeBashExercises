@@ -33,7 +33,7 @@ makeSolvable(){
 	numChaos=0
 	for ((i=1; i <= NUM_TILES; ++i))
 	do
-		for ((j=i; j <= NUM_TILES; ++j))
+		for ((j=0; j < i; ++j))
 		do
 			if [[ ${grid[j]} -gt i ]]; then
 				let numChaos++
@@ -42,7 +42,7 @@ makeSolvable(){
 	done
 
 	echo "numChaos = $numChaos"
-	if (( ((numChaos % 2)) == 1 )); then
+	if (( ((numChaos % 2)) != 0 )); then
 		last=$((NUM_TILES-1))
 		before_last=$((NUM_TILES-2))
 		swapTiles $last $before_last
@@ -73,6 +73,7 @@ checkWin(){
 	done
 	for((;;))
 	do
+		echo "You won! Want to play again [y/n]?"
 		read -n 1 -s
 		case $REPLY in
 			y|Y )
@@ -160,7 +161,6 @@ startGame(){
 initGame(){
 	grid=()	
 	bound=$(($NUM_TILES+1))
-	echo "bound = $bound"
 	for ((i=1; i <= NUM_TILES; ++i))
 	do
 		j=$(getRandom 0 $bound)
@@ -178,6 +178,7 @@ initGame(){
 	done
 	EMPTY=$NUM_TILES;
 	makeSolvable
+	printGrid
 }
 
 printGrid(){
